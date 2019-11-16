@@ -118,7 +118,7 @@ public class Login {
 							user.setCustomerID(helper.getUserId(userName));
 						
 							//reservation class to be called upon successful login 
-							Main.main(null);
+							Main.main(null, user);
 							frame.dispose();
 							
 						}else

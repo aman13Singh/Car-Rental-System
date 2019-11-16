@@ -4,6 +4,13 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import Controller.CarRegistrationDAO;
+import Controller.CustomerDAO;
+import Controller.RentCarDAO;
+import Controller.ReturnCarDAO;
+import Entities.UserInfo;
+
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -13,15 +20,17 @@ import java.awt.event.ActionEvent;
 public class Main {
 
 	private JFrame frame;
+	UserInfo user;
+
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args , UserInfo user) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main window = new Main();
+					Main window = new Main(user);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -33,7 +42,8 @@ public class Main {
 	/**
 	 * Create the application.
 	 */
-	public Main() {
+	public Main(UserInfo user) {
+		this.user = user;
 		initialize();
 	}
 
@@ -57,7 +67,7 @@ public class Main {
 		JButton btnCarRegistration = new JButton("Car Registration");
 		btnCarRegistration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CarRegistration.main(null);
+				CarRegistrationDAO.main(null, user);
 			}
 		});
 		btnCarRegistration.setForeground(SystemColor.activeCaption);
@@ -74,7 +84,7 @@ public class Main {
 		JButton btnCustomer = new JButton("Customer");
 		btnCustomer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Customer.main(null);
+				CustomerDAO.main(null);
 			}
 		});
 		btnCustomer.setForeground(SystemColor.activeCaption);
@@ -91,7 +101,7 @@ public class Main {
 		JButton btnRental = new JButton("Rental");
 		btnRental.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RentCar.main(null);
+				RentCarDAO.main(null);
 			}
 		});
 		btnRental.setForeground(SystemColor.activeCaption);
@@ -108,7 +118,7 @@ public class Main {
 		JButton btnReturnCar = new JButton("Return Car");
 		btnReturnCar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ReturnCar.main(null);
+				ReturnCarDAO.main(null);
 			}
 		});
 		btnReturnCar.setForeground(SystemColor.activeCaption);
@@ -121,6 +131,9 @@ public class Main {
 		lblWelcome.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblWelcome.setBounds(135, 27, 213, 89);
 		frame.getContentPane().add(lblWelcome);
+		lblWelcome.setText("Welcome " + user.getCustomerName());
+		System.out.println(user.getCustomerName());
+
 		
 		JButton btnSignOut = new JButton("Sign Out");
 		btnSignOut.setForeground(SystemColor.activeCaption);
