@@ -4,27 +4,35 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+
+import Controller.Authenticate;
+import Controller.RegistrationDAO;
+import Controller.Validate;
+
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class Registration {
 
 	private JFrame frame;
-	private JTextField customerIDtextField;
 	private JTextField customernametextField;
 	private JTextField addresstextField;
 	private JTextField numbertextField;
-	private String customerID = "";
+	private int customerID ;
 	private String customerName = "";
-	private String password = "";
 	private String address = "";
 	private String number = "";
-	private JTextField textField;
+	private String password = "";
+	private RegistrationDAO registrationDAO =  new RegistrationDAO();
+
+	private JTextField passwordtextField;
 	/**
 	 * Launch the application.
 	 */
@@ -57,12 +65,6 @@ public class Registration {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblCustomerId = new JLabel("Customer ID");
-		lblCustomerId.setForeground(SystemColor.activeCaption);
-		lblCustomerId.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblCustomerId.setBounds(39, 68, 128, 24);
-		frame.getContentPane().add(lblCustomerId);
-		
 		JLabel lblName = new JLabel("Name");
 		lblName.setForeground(SystemColor.activeCaption);
 		lblName.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -80,11 +82,6 @@ public class Registration {
 		lblNumber.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblNumber.setBounds(39, 179, 90, 14);
 		frame.getContentPane().add(lblNumber);
-		
-		customerIDtextField = new JTextField();
-		customerIDtextField.setBounds(168, 70, 140, 20);
-		frame.getContentPane().add(customerIDtextField);
-		customerIDtextField.setColumns(10);
 		
 		customernametextField = new JTextField();
 		customernametextField.setBounds(168, 105, 140, 20);
@@ -105,9 +102,42 @@ public class Registration {
 		btnBecomeCustomer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				customerName = 	customernametextField.getText();
+				address = addresstextField.getText();
+				number = numbertextField.getText();
+				password =  passwordtextField.getText();
+				
+				//Create an instance of Validate class and pass all the inputs given by the user
+				Validate validate = new Validate(customerName, address , number, password);
+				if(validate.isSignUpDataValid())
+				{
+					System.out.println("All the inputs are valid.");
+					Authenticate auth = new Authenticate();
+					auth.setCustomerName(customerName);
+					if(auth.matchUserName())
+					{
+						System.out.println("The username already exists, choose a different one.");
+						JOptionPane.showMessageDialog(null,"The username already exists, choose a different one.");
+					}else
+					{
+						//store the user inputs in the user_Info table
+						registrationDAO.insertNewUser(customerName, address, number, password);
+						ArrayList<String> newList = new ArrayList<>();
+						newList = registrationDAO.getUserProfile(customerName);
+						
+						//to see the profile of newly added user
+						for(String str: newList)
+						{
+							System.out.println(str);
+						}	
+						Login.main(null);
+						frame.dispose();
+					}
+				}
+			}	
 				
 				
-			}
+			
 		});
 		btnBecomeCustomer.setForeground(SystemColor.activeCaption);
 		btnBecomeCustomer.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -115,6 +145,18 @@ public class Registration {
 		frame.getContentPane().add(btnBecomeCustomer);
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// TODO Auto-generated method stub
+				customernametextField.setText("");
+				addresstextField.setText("");
+				numbertextField.setText("");
+				passwordtextField.setText("");
+			
+
+			}
+		});
 		btnCancel.setForeground(SystemColor.activeCaption);
 		btnCancel.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnCancel.setBounds(343, 309, 97, 23);
@@ -126,11 +168,11 @@ public class Registration {
 		lblPassword.setBounds(39, 211, 90, 24);
 		frame.getContentPane().add(lblPassword);
 		
-		textField = new JTextField();
-		textField.setForeground(SystemColor.activeCaption);
-		textField.setFont(new Font("Tahoma", Font.BOLD, 15));
-		textField.setBounds(168, 213, 140, 20);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		passwordtextField = new JTextField();
+		passwordtextField.setForeground(SystemColor.activeCaption);
+		passwordtextField.setFont(new Font("Tahoma", Font.BOLD, 15));
+		passwordtextField.setBounds(168, 213, 140, 20);
+		frame.getContentPane().add(passwordtextField);
+		passwordtextField.setColumns(10);
 	}
 }

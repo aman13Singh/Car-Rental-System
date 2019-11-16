@@ -17,6 +17,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import Controller.Authenticate;
+import Controller.Validate;
+import Entities.UserInfo;
 
 import java.awt.SystemColor;
 
@@ -89,7 +92,45 @@ public class Login {
 				userName = usernametextField.getText();
 				password = passwordtextField.getText();
 				
-				 if(userName.equals("csis")&& password.equals("123"))
+				
+
+				  //Create an instance of Validate class and pass all the inputs given by the user
+				  Validate validate = new Validate(userName,password);
+				  
+				  if(validate.isLoginDataValid()) 
+				  {
+					  System.out.println("All inputs are valid."); 
+					  
+					  //create an instance of Authenticate class to verify userName and password inputs
+					  Authenticate auth = new Authenticate();
+						auth.setCustomerName(userName);
+						auth.setPassword(password);
+						System.out.println("P:  "+ auth.getPassword());
+						if(auth.matchUserName() && auth.matchpassword())
+						{
+							System.out.println("Login Successful");
+							JOptionPane.showMessageDialog(null,"Login Successful");
+							
+							//set user information
+							UserInfo user = new UserInfo();
+							DBHelper helper = new DBHelper();
+							user.setCustomerName(userName);
+							user.setCustomerID(helper.getUserId(userName));
+						
+							//reservation class to be called upon successful login 
+							Main.main(null);
+							frame.dispose();
+							
+						}else
+						{
+							System.out.println("Login Unsuccessful");
+							JOptionPane.showMessageDialog(null,"Wrong username or password.");
+						}
+							
+				  }
+				
+				
+				/* if(userName.equals("csis")&& password.equals("123"))
 					   
 			        {
 			            Main.main(null);
@@ -100,7 +141,7 @@ public class Login {
 			        	System.out.println("Login Unsuccessful");
 						JOptionPane.showMessageDialog(null,"Wrong username or password.");
 			        }
-			        
+			        */
 		
 			}
 		});
@@ -110,6 +151,14 @@ public class Login {
 		frame.getContentPane().add(btnLogin);
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				usernametextField.setText("");
+				passwordtextField.setText("");
+				
+			}
+		});
 		btnCancel.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnCancel.setForeground(SystemColor.activeCaption);
 		btnCancel.setBounds(321, 236, 89, 23);
