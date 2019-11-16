@@ -1,12 +1,32 @@
 package Boundry;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+
+import java.awt.SystemColor;
 
 public class Login {
 
 	private JFrame frame;
+	private JTextField usernametextField;
+	private JTextField passwordtextField;
+	private String userName = "";
+	private String password = "";
 
 	/**
 	 * Launch the application.
@@ -36,9 +56,87 @@ public class Login {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 538, 357);
+		frame.setBounds(100, 100, 638, 401);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		JLabel lblUsername = new JLabel("Username");
+		lblUsername.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblUsername.setForeground(SystemColor.activeCaption);
+		lblUsername.setBounds(172, 107, 80, 31);
+		frame.getContentPane().add(lblUsername);
+		
+		JLabel lblPassword = new JLabel("Password");
+		lblPassword.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblPassword.setForeground(SystemColor.activeCaption);
+		lblPassword.setBounds(172, 149, 80, 41);
+		frame.getContentPane().add(lblPassword);
+		
+		usernametextField = new JTextField();
+		usernametextField.setBounds(262, 110, 148, 26);
+		frame.getContentPane().add(usernametextField);
+		usernametextField.setColumns(10);
+		
+		passwordtextField = new JTextField();
+		passwordtextField.setBounds(262, 159, 148, 26);
+		frame.getContentPane().add(passwordtextField);
+		passwordtextField.setColumns(10);
+		
+		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				userName = usernametextField.getText();
+				password = passwordtextField.getText();
+				
+				 if(userName.equals("csis")&& password.equals("123"))
+					   
+			        {
+			            Main.main(null);
+			            frame.dispose();
+			        }
+			        else
+			        {
+			        	System.out.println("Login Unsuccessful");
+						JOptionPane.showMessageDialog(null,"Wrong username or password.");
+			        }
+			        
+		
+			}
+		});
+		btnLogin.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnLogin.setForeground(SystemColor.activeCaption);
+		btnLogin.setBounds(202, 236, 89, 23);
+		frame.getContentPane().add(btnLogin);
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnCancel.setForeground(SystemColor.activeCaption);
+		btnCancel.setBounds(321, 236, 89, 23);
+		frame.getContentPane().add(btnCancel);
+		
+		JLabel lblNotAMember = new JLabel("Not a member.....");
+		lblNotAMember.setForeground(SystemColor.activeCaption);
+		lblNotAMember.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNotAMember.setBounds(156, 296, 129, 26);
+		frame.getContentPane().add(lblNotAMember);
+		
+		JButton btnSignUp = new JButton("Sign up");
+		btnSignUp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Registration.main(null);
+				frame.dispose();
+			}
+		});
+		btnSignUp.setForeground(SystemColor.activeCaption);
+		btnSignUp.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnSignUp.setBounds(304, 298, 89, 23);
+		frame.getContentPane().add(btnSignUp);
+	
+		
+		
+		
+		
 	}
-
 }
