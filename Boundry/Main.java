@@ -7,6 +7,8 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Main {
 
@@ -53,6 +55,11 @@ public class Main {
 		frame.getContentPane().add(lblCarRegistration);
 		
 		JButton btnCarRegistration = new JButton("Car Registration");
+		btnCarRegistration.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CarRegistration.main(null);
+			}
+		});
 		btnCarRegistration.setForeground(SystemColor.activeCaption);
 		btnCarRegistration.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnCarRegistration.setBounds(10, 230, 155, 23);
@@ -65,6 +72,11 @@ public class Main {
 		frame.getContentPane().add(lblCustomer);
 		
 		JButton btnCustomer = new JButton("Customer");
+		btnCustomer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Customer.main(null);
+			}
+		});
 		btnCustomer.setForeground(SystemColor.activeCaption);
 		btnCustomer.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnCustomer.setBounds(177, 230, 103, 23);
@@ -77,6 +89,11 @@ public class Main {
 		frame.getContentPane().add(lblRentCar);
 		
 		JButton btnRental = new JButton("Rental");
+		btnRental.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RentCar.main(null);
+			}
+		});
 		btnRental.setForeground(SystemColor.activeCaption);
 		btnRental.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnRental.setBounds(290, 230, 123, 23);
@@ -89,6 +106,11 @@ public class Main {
 		frame.getContentPane().add(lblReturnCar);
 		
 		JButton btnReturnCar = new JButton("Return Car");
+		btnReturnCar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ReturnCar.main(null);
+			}
+		});
 		btnReturnCar.setForeground(SystemColor.activeCaption);
 		btnReturnCar.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnReturnCar.setBounds(436, 230, 115, 23);
