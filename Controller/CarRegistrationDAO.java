@@ -48,19 +48,28 @@ public class CarRegistrationDAO {
 	private String make;
 	private Date fromDate;
 	private Date toDate;
+	private float price;
+	
+	
+	JDateChooser fromdateChooser;
+	JDateChooser todateChooser;
+	
+	
+	// carRegisNotextField, modeltextField , maketextField, fromDate, toDate pricetextField
 
-	// CarRegistrationNo, model , make, fromDate, toDate
-
-	DBHelper helper = new DBHelper();
 	private ResultSet rs = null;
-	private Statement stmt = null;
+	private java.sql.Statement stmt = null;
 	private PreparedStatement pstmt = null;
 
-	CarRegistration newCarRegistration = new CarRegistration();
-	private JTable table;
-	
-	private ListSelectionListener listener ;
 	private DefaultTableModel tm = new DefaultTableModel();
+	private DBHelper sd = new DBHelper();
+	
+	CarRegistration newCarRegistration = new CarRegistration();
+
+	private JTable table;
+	private ListSelectionListener listener ;
+	private JTextField pricetextField;
+	private JTextField IDtextField;
 
 
 	/**
@@ -99,7 +108,8 @@ public class CarRegistrationDAO {
 		frame.getContentPane().setLayout(null);
 		
 		
-		
+		Color color = new Color(85, 96, 128);
+
 		/**
 		 * define listener for table
 		 */
@@ -109,7 +119,23 @@ public class CarRegistrationDAO {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
-				//updateTable();
+
+				//get the value of the selected row's id (column 0)
+				int currId = (int) table.getValueAt(table.getSelectedRow(),0);
+				
+				//Grab the corresponding shoe from the database
+				CarRegistration ts = getcar(currId);
+				
+				IDtextField.setText(String.valueOf(ts.getID())); 
+				carRegisNotextField.setText((String.valueOf(ts.getCarRegistrationNo())));
+				modeltextField.setText(ts.getModel());
+				maketextField.setText(ts.getMake());
+				fromdateChooser.setDate(((ts.getFromDate())));
+				todateChooser.setDate((ts.getToDate())); 
+				pricetextField.setText(String.valueOf(ts.getPrice())); 
+				
+			
+			
 			}
 			
 		};
@@ -117,7 +143,7 @@ public class CarRegistrationDAO {
 		
 		
 
-		JButton btnback = new JButton(">>>Back");
+		JButton btnback = new JButton("<<<Back");
 		btnback.setForeground(new Color(0, 0, 128));
 		btnback.setFont(new Font("Consolas", Font.BOLD, 14));
 		btnback.addActionListener(new ActionListener() {
@@ -128,7 +154,7 @@ public class CarRegistrationDAO {
 
 			}
 		});
-		btnback.setBounds(559, 357, 93, 23);
+		btnback.setBounds(867, 352, 93, 23);
 		frame.getContentPane().add(btnback);
 
 		JLabel lblCarRegistrationNo = new JLabel("Car Registration No");
@@ -152,7 +178,7 @@ public class CarRegistrationDAO {
 		JLabel lblAvaiableDate = new JLabel("Avaiable Date");
 		lblAvaiableDate.setForeground(new Color(0, 0, 128));
 		lblAvaiableDate.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblAvaiableDate.setBounds(50, 188, 115, 25);
+		lblAvaiableDate.setBounds(39, 220, 115, 25);
 		frame.getContentPane().add(lblAvaiableDate);
 
 		carRegisNotextField = new JTextField();
@@ -174,21 +200,21 @@ public class CarRegistrationDAO {
 		JLabel lblTo = DefaultComponentFactory.getInstance().createLabel("To");
 		lblTo.setForeground(new Color(0, 0, 128));
 		lblTo.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblTo.setBounds(195, 232, 46, 14);
+		lblTo.setBounds(193, 259, 46, 14);
 		frame.getContentPane().add(lblTo);
 
-		JDateChooser fromdateChooser = new JDateChooser();
-		fromdateChooser.setBounds(244, 193, 127, 20);
+		fromdateChooser = new JDateChooser();
+		fromdateChooser.setBounds(242, 220, 127, 20);
 		frame.getContentPane().add(fromdateChooser);
 
 		JLabel lblFrom = new JLabel("From");
 		lblFrom.setForeground(new Color(0, 0, 128));
 		lblFrom.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblFrom.setBounds(195, 193, 46, 14);
+		lblFrom.setBounds(186, 220, 46, 14);
 		frame.getContentPane().add(lblFrom);
 
-		JDateChooser todateChooser = new JDateChooser();
-		todateChooser.setBounds(244, 226, 127, 20);
+		todateChooser = new JDateChooser();
+		todateChooser.setBounds(242, 253, 127, 20);
 		frame.getContentPane().add(todateChooser);
 
 		JButton btnRegisterCar = new JButton("Register Car");
@@ -200,7 +226,7 @@ public class CarRegistrationDAO {
 				make = maketextField.getText();
 				java.sql.Date fromDate = new java.sql.Date(fromdateChooser.getDate().getTime());
 				java.sql.Date toDate = new java.sql.Date(todateChooser.getDate().getTime());
-
+                price = Float.valueOf(pricetextField.getText()).floatValue();
 				/*
 				 * insertCarRegister(user.getCustomerID(), user.getCustomerName(),
 				 * newCarRegistration.getCarRegistrationNo(), newCarRegistration.getModel() ,
@@ -211,35 +237,71 @@ public class CarRegistrationDAO {
 
 				
 				insertCarRegister(user.getCustomerID(), user.getCustomerName(),  CarRegistrationNo,
-				          model, make, fromDate, toDate);
+				          model, make, fromDate, toDate, price);
+			
+				updateTable();			
+			
 			}
 		});
 		btnRegisterCar.setForeground(new Color(0, 0, 128));
 		btnRegisterCar.setFont(new Font("Consolas", Font.BOLD, 14));
-		btnRegisterCar.setBounds(54, 276, 247, 34);
+		btnRegisterCar.setBounds(32, 346, 247, 34);
 		frame.getContentPane().add(btnRegisterCar);
 
 		JButton btnChangeInformation = new JButton("Change Information");
+		btnChangeInformation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				java.sql.Date FromDate = new java.sql.Date(fromdateChooser.getDate().getTime());
+				java.sql.Date toDate = new java.sql.Date(todateChooser.getDate().getTime());
+				
+
+				CarRegistration cr = new CarRegistration();
+	                cr.setID(Integer.parseInt(IDtextField.getText()));
+					cr.setCarRegistrationNo((carRegisNotextField.getText()));
+					cr.setModel(modeltextField.getText());
+					cr.setMake((maketextField.getText()));
+					cr.setFromDate(FromDate);
+					cr.setToDate(toDate);
+					cr.setPrice(Float.parseFloat(pricetextField.getText()));
+									
+
+					
+					updateCarInventory(cr);
+					
+					updateTable();
+				
+				
+			}
+		});
 		btnChangeInformation.setForeground(new Color(0, 0, 128));
 		btnChangeInformation.setFont(new Font("Consolas", Font.BOLD, 14));
-		btnChangeInformation.setBounds(54, 321, 247, 34);
+		btnChangeInformation.setBounds(300, 346, 247, 34);
 		frame.getContentPane().add(btnChangeInformation);
 
 		JButton btnRemoveYourCar = new JButton("Remove Your Car");
+		btnRemoveYourCar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				deleteCarInventory(Integer.parseInt(IDtextField.getText()));
+				updateTable();
+				
+			}
+		});
 		btnRemoveYourCar.setForeground(new Color(0, 0, 128));
 		btnRemoveYourCar.setFont(new Font("Consolas", Font.BOLD, 14));
-		btnRemoveYourCar.setBounds(308, 324, 247, 29);
+		btnRemoveYourCar.setBounds(569, 346, 247, 34);
 		frame.getContentPane().add(btnRemoveYourCar);
 
 		JLabel label = new JLabel("");
 		label.setForeground(new Color(0, 0, 128));
 		label.setFont(new Font("Candara Light", Font.BOLD, 13));
-		label.setBounds(10, 24, 196, 23);
+		label.setBounds(10, 11, 196, 23);
 		frame.getContentPane().add(label);
 		label.setText(user.getCustomerName());
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(426, 35, 434, 211);
+		scrollPane.setBounds(454, 41, 534, 238);
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
@@ -251,7 +313,32 @@ public class CarRegistrationDAO {
 			));
 		table.setBackground(Color.WHITE);
 		scrollPane.setViewportView(table);
+		
+		JLabel lblPrice = new JLabel("Price");
+		lblPrice.setForeground(new Color(0, 0, 128));
+		lblPrice.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblPrice.setBounds(108, 188, 57, 23);
+		frame.getContentPane().add(lblPrice);
+		
+		pricetextField = new JTextField();
+		pricetextField.setBounds(206, 177, 86, 20);
+		frame.getContentPane().add(pricetextField);
+		pricetextField.setColumns(10);
+		
+		IDtextField = new JTextField();
+		IDtextField.setBounds(206, 39, 86, 20);
+		frame.getContentPane().add(IDtextField);
+		IDtextField.setColumns(10);
+		
+		JLabel lblId = new JLabel("ID");
+		lblId.setForeground(new Color(0, 0, 128));
+		lblId.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblId.setBounds(108, 44, 46, 14);
+		frame.getContentPane().add(lblId);
 		System.out.println(user.getCustomerName());
+		
+		updateTable();
+
 	}
 
 	/**
@@ -268,17 +355,17 @@ public class CarRegistrationDAO {
 	// CarRegistrationNo, model , make, fromDate, toDate
 
 	public void insertCarRegister( int customerID,  String customerName, String CarRegistrationNo, String model,
-			String make, Date fromDate, Date toDate) {
+			String make, Date fromDate, Date toDate, Float price) {
 		// TODO Auto-generated method stub
 
-		String insertSql = "INSERT INTO carregistration ( customerID,  customerName, CarRegistrationNo,model,make,fromDate,toDate ) "
-				+ "values (?,?,?,?,?,?,?)";
+		String insertSql = "INSERT INTO carregistration ( customerID,  customerName, CarRegistrationNo,model,make,fromDate,toDate,price ) "
+				+ "values (?,?,?,?,?,?,?,?)";
 
 		try {
-			helper.connectDB();
+			sd.connectDB();
 
 			// create statement
-			pstmt = helper.getConnection().prepareStatement(insertSql);
+			pstmt = sd.getConnection().prepareStatement(insertSql);
 
 			// declare the parameter starting at 1
 			pstmt.setInt(1,customerID);
@@ -288,10 +375,11 @@ public class CarRegistrationDAO {
 			pstmt.setString(5, make);
 			pstmt.setDate(6, fromDate);
 			pstmt.setDate(7, toDate);
+			pstmt.setFloat(8, price);
 
 			pstmt.executeUpdate();
 
-			helper.disconnectDB();
+			sd.disconnectDB();
 		} catch (SQLException sx) {
 			System.out.println("Error inserting data into the database");
 			System.out.println(sx.getMessage());
@@ -301,7 +389,7 @@ public class CarRegistrationDAO {
 	}
 
 
-	/*private void updateTable()	{
+	private void updateTable()	{
 	 	table.getSelectionModel().removeListSelectionListener(listener);
 		tm = new DefaultTableModel();
 		
@@ -309,29 +397,191 @@ public class CarRegistrationDAO {
 
 		//Add the columns
 		tm.addColumn("ID");
-		tm.addColumn("Item");
-		tm.addColumn("Type");
-		tm.addColumn("Quantity");
+		tm.addColumn("RegNo");
+		tm.addColumn("Model");
+		tm.addColumn("Make");
+		tm.addColumn("FromDate");
+		tm.addColumn("ToDate");
 		tm.addColumn("Price");
-		tm.addColumn("Category");
-		tm.addColumn("UnitPrice");
 		
-		/*		
+				
 		//Add the rows
-		ArrayList<AddProperty> sl = new ArrayList<AddProperty>();
+		ArrayList<CarRegistration> sl = new ArrayList<CarRegistration>();
 		
 		//Populate the arraylist with the getShoes
-		sl = listAddPropertyInventory();
+		sl = listCarRegistration();
 		
-		for (AddProperty s : sl)	{
-			tm.addRow(s.getVector());
+		for (CarRegistration s : sl)	{
+			tm.addRow(s.getVectoradmin());
 		}
 		
 		table.setModel(tm);
 		table.getSelectionModel().addListSelectionListener(listener);
 	}
-*/
 
 
+	
+	public ArrayList<CarRegistration> listCarRegistration() 
+	{
+		ArrayList<CarRegistration> s1 = new ArrayList<CarRegistration>();
 
+		String sql = "SELECT * FROM carregistration order by carregistration.ID";
+		try {
+			// connect to the database
+			sd.connectDB();
+			stmt = sd.getConnection().createStatement();
+			rs = ((java.sql.Statement) stmt).executeQuery(sql);
+
+			while (rs.next())
+			{     
+				// CarRegistrationNo, model , make, fromDate, toDate
+
+				 
+				CarRegistration s = new CarRegistration();
+				
+				//Get the right type (string) from the right column ("itemId");
+				s.setID((rs.getInt("ID")));
+				s.setCarRegistrationNo((rs.getString("CarRegistrationNo")));
+				s.setModel((rs.getString("model")));
+				s.setMake((rs.getString("make")));
+				s.setFromDate((rs.getDate("fromDate")));
+				s.setToDate((rs.getDate("toDate")));
+				s.setPrice((rs.getFloat("price")));
+				s1.add(s);
+				 // System.out.println(s1);
+			}
+
+			sd.disconnectDB();
+		} catch (SQLException sx) {
+			System.out.println("Error fetching data from the database");
+			System.out.println(sx.getMessage());
+			System.out.println(sx.getErrorCode());
+			System.out.println(sx.getSQLState());
+		}
+
+		return s1;
+	}
+
+	
+	
+	
+
+	//method to delete inventory
+	public void deleteCarInventory(int id) {
+		
+		String sql = "DELETE FROM carregistration  WHERE ID = ?";
+		
+		try {
+			
+			//Connect to the database
+			sd.connectDB();
+			
+			//Create the statement
+			pstmt = sd.getConnection().prepareStatement(sql);
+			
+			//Declare the parameter (starting at 1)
+			pstmt.setInt(1,id);
+			
+			//Delete Data
+			pstmt.executeUpdate();
+			
+			sd.disconnectDB();
+				
+			} catch (SQLException sx) {
+				System.out.println("Error Connecting to Database");
+				System.out.println(sx.getMessage());
+				System.out.println(sx.getErrorCode());
+				System.out.println(sx.getSQLState());
+				
+			}		
+		}
+
+	
+	public void updateCarInventory(CarRegistration su)	{		
+
+		String updateSql = "UPDATE carregistration  SET " + 
+				"CarRegistrationNo = ?, " +
+				"model = ?, " +
+				"make = ?, " +
+				"fromDate = ?, " +
+				"toDate = ?, " +
+				"price = ? " +
+				
+				"WHERE ID = ?";
+		
+		//itemId , Item , Type , Quantity , Price , Category , Unitprice
+		
+		try {
+				sd.connectDB();
+				
+				pstmt = sd.getConnection().prepareStatement(updateSql);
+		
+				
+				//pstmt.setInt(1, su.getVGID());  				
+				pstmt.setString(1, su.getCarRegistrationNo());
+				pstmt.setString(2, su.getModel());
+				pstmt.setString(3, su.getMake());
+				pstmt.setDate(4, su.getFromDate());
+				pstmt.setDate(5, su.getToDate());
+				pstmt.setFloat(6, su.getPrice());
+				pstmt.setInt(7, su.getID());  				
+				
+				pstmt.executeUpdate();
+				
+				sd.disconnectDB();
+				
+		} catch (SQLException sx) {
+			System.out.println("Error Connecting to Database");
+			System.out.println(sx.getMessage());
+			System.out.println(sx.getErrorCode());
+			System.out.println(sx.getSQLState());
+			
+		}	
+		
+	}
+	
+	
+	//method to get inventory 
+			public CarRegistration getcar(int ID) {
+					
+				CarRegistration ap = new CarRegistration();
+					
+					String sql = "SELECT * FROM carregistration  WHERE ID  = ?";
+					
+					try {
+						
+						//Connect to the database
+						sd.connectDB();
+						
+						//Create the statement
+						pstmt = sd.getConnection().prepareStatement(sql);
+						
+						//Declare the parameter (starting at 1)
+						pstmt.setInt(1,ID);
+						
+						rs = pstmt.executeQuery();
+						
+						while (rs.next())	{
+							
+							//Get the right type (string) from the right column ("");									
+							ap.setID((rs.getInt("ID")));
+							ap.setCarRegistrationNo((rs.getString("CarRegistrationNo")));
+							ap.setModel((rs.getString("model")));
+							ap.setMake((rs.getString("make")));
+							ap.setFromDate((rs.getDate("fromDate")));
+							ap.setToDate((rs.getDate("toDate")));
+							ap.setPrice((rs.getFloat("price")));				
+						} 
+						
+						sd.disconnectDB();
+							
+						} catch (SQLException sx) {
+							System.out.println("Error Connecting to Database");
+							System.out.println(sx.getMessage());
+							System.out.println(sx.getErrorCode());
+							System.out.println(sx.getSQLState());
+							
+						}
+						return ap;			
+					}
 }
