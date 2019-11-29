@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextPane;
 
 public class Registration {
 
@@ -68,37 +69,37 @@ public class Registration {
 		JLabel lblName = new JLabel("Name");
 		lblName.setForeground(SystemColor.activeCaption);
 		lblName.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblName.setBounds(39, 103, 110, 24);
+		lblName.setBounds(39, 82, 110, 24);
 		frame.getContentPane().add(lblName);
 		
 		JLabel lblAddress = new JLabel("Address");
 		lblAddress.setForeground(SystemColor.activeCaption);
 		lblAddress.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblAddress.setBounds(39, 138, 97, 24);
+		lblAddress.setBounds(39, 117, 97, 24);
 		frame.getContentPane().add(lblAddress);
 		
 		JLabel lblNumber = new JLabel("Number");
 		lblNumber.setForeground(new Color(153, 180, 209));
 		lblNumber.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblNumber.setBounds(39, 179, 90, 14);
+		lblNumber.setBounds(39, 158, 90, 14);
 		frame.getContentPane().add(lblNumber);
 		
 		customernametextField = new JTextField();
-		customernametextField.setBounds(168, 105, 140, 20);
+		customernametextField.setBounds(168, 84, 140, 20);
 		frame.getContentPane().add(customernametextField);
 		customernametextField.setColumns(10);
 		
 		addresstextField = new JTextField();
-		addresstextField.setBounds(168, 140, 140, 20);
+		addresstextField.setBounds(168, 119, 140, 20);
 		frame.getContentPane().add(addresstextField);
 		addresstextField.setColumns(10);
 		
 		numbertextField = new JTextField();
-		numbertextField.setBounds(168, 178, 140, 20);
+		numbertextField.setBounds(168, 157, 140, 20);
 		frame.getContentPane().add(numbertextField);
 		numbertextField.setColumns(10);
 		
-		JButton btnBecomeCustomer = new JButton("Become Customer");
+		JButton btnBecomeCustomer = new JButton("Customer");
 		btnBecomeCustomer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -141,7 +142,7 @@ public class Registration {
 		});
 		btnBecomeCustomer.setForeground(SystemColor.activeCaption);
 		btnBecomeCustomer.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnBecomeCustomer.setBounds(115, 275, 193, 23);
+		btnBecomeCustomer.setBounds(168, 233, 140, 23);
 		frame.getContentPane().add(btnBecomeCustomer);
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -153,26 +154,36 @@ public class Registration {
 				addresstextField.setText("");
 				numbertextField.setText("");
 				passwordtextField.setText("");
-			
+				
+				
+				Login.main(null);
+				frame.dispose();
+				
 
 			}
 		});
 		btnCancel.setForeground(SystemColor.activeCaption);
 		btnCancel.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnCancel.setBounds(343, 309, 97, 23);
+		btnCancel.setBounds(347, 273, 97, 23);
 		frame.getContentPane().add(btnCancel);
 		
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setForeground(SystemColor.activeCaption);
 		lblPassword.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblPassword.setBounds(39, 211, 90, 24);
+		lblPassword.setBounds(39, 190, 90, 24);
 		frame.getContentPane().add(lblPassword);
 		
 		passwordtextField = new JTextField();
 		passwordtextField.setForeground(SystemColor.activeCaption);
 		passwordtextField.setFont(new Font("Tahoma", Font.BOLD, 15));
-		passwordtextField.setBounds(168, 213, 140, 20);
+		passwordtextField.setBounds(168, 192, 140, 20);
 		frame.getContentPane().add(passwordtextField);
 		passwordtextField.setColumns(10);
+		
+		JLabel lblPleaseProvideYour = new JLabel("Please Provide Your Personal Information");
+		lblPleaseProvideYour.setForeground(new Color(0, 0, 128));
+		lblPleaseProvideYour.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblPleaseProvideYour.setBounds(39, 22, 315, 37);
+		frame.getContentPane().add(lblPleaseProvideYour);
 	}
 }
