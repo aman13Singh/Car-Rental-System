@@ -17,6 +17,7 @@ public class Authenticate {
 	private String purpose = "";
 	private LoginDAO homeDAO = new LoginDAO();
 	private RegistrationDAO registrationDAO =  new RegistrationDAO();
+	AdminDAO adminDAO = new AdminDAO();
 	
 	//default constructor
 	public Authenticate() {	
@@ -136,7 +137,7 @@ public class Authenticate {
 		/**
 		 * @return the boolean value whether username verified or not
 		 */
-	/*	public boolean matchAdminUserName()
+		public boolean matchAdminUserName()
 		{
 			ArrayList<String> list = new ArrayList<>();
 			if(purpose.equals("Login Task"))
@@ -147,19 +148,19 @@ public class Authenticate {
 				
 			for(String str: list)
 			{
-				if(username.equals(str))
+				if(customerName.equals(str))
 					return true;
 			}		
 			return false;		
-		} */
+		} 
 		
 		//method to verify password input
 		/**
 		 * @return the boolean value whether password verified or not
 		 */
-	/*	public boolean matchAdminpassword()
+		public boolean matchAdminpassword()
 		{
-			String pswrd = adminDAO.getAdminPassword(username);
+			String pswrd = adminDAO.getAdminPassword(customerName);
 			
 				if(password.equals(pswrd))
 				{
@@ -167,7 +168,7 @@ public class Authenticate {
 				}	
 			return false;		
 		}
-	*/
+	
 
 	
 }
