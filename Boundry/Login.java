@@ -22,6 +22,7 @@ import Controller.Validate;
 import Entities.UserInfo;
 
 import java.awt.SystemColor;
+import javax.swing.JMenuBar;
 
 public class Login {
 
@@ -31,6 +32,8 @@ public class Login {
 	private String userName = "";
 	private String password = "";
 
+	UserInfo user;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -118,10 +121,21 @@ public class Login {
 							user.setCustomerID(helper.getUserId(userName));
 						
 							//reservation class to be called upon successful login 
+						/*	if(userName == "admin" && password == "@Dmin111") {
+							manageCars.main(null, user);
+							}
+							*/
+							
+							
 							Main.main(null, user);
 							frame.dispose();
 							
-						}else
+						}/*else if(username.equals("admin")&& password.equals("admin1")){
+							
+							manageCars.main(null);
+				            frame.dispose();
+				            
+				        }*/else
 						{
 							System.out.println("Login Unsuccessful");
 							JOptionPane.showMessageDialog(null,"Wrong username or password.");
@@ -147,7 +161,7 @@ public class Login {
 		});
 		btnLogin.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnLogin.setForeground(SystemColor.activeCaption);
-		btnLogin.setBounds(202, 236, 89, 23);
+		btnLogin.setBounds(262, 232, 89, 23);
 		frame.getContentPane().add(btnLogin);
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -161,13 +175,13 @@ public class Login {
 		});
 		btnCancel.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnCancel.setForeground(SystemColor.activeCaption);
-		btnCancel.setBounds(321, 236, 89, 23);
+		btnCancel.setBounds(381, 232, 89, 23);
 		frame.getContentPane().add(btnCancel);
 		
-		JLabel lblNotAMember = new JLabel("Not a member.....");
+		JLabel lblNotAMember = new JLabel("Not a member...");
 		lblNotAMember.setForeground(SystemColor.activeCaption);
 		lblNotAMember.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lblNotAMember.setBounds(156, 296, 129, 26);
+		lblNotAMember.setBounds(172, 295, 129, 26);
 		frame.getContentPane().add(lblNotAMember);
 		
 		JButton btnSignUp = new JButton("Sign up");
@@ -180,8 +194,20 @@ public class Login {
 		});
 		btnSignUp.setForeground(SystemColor.activeCaption);
 		btnSignUp.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnSignUp.setBounds(304, 298, 89, 23);
+		btnSignUp.setBounds(308, 295, 89, 23);
 		frame.getContentPane().add(btnSignUp);
+		
+		JButton adminLoginbtn = new JButton("Admin ");
+		adminLoginbtn.setFont(new Font("Tahoma", Font.BOLD, 13));
+		adminLoginbtn.setForeground(new Color(0, 0, 128));
+		adminLoginbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				AdminLogin.main(null, user);
+			}
+		});
+		adminLoginbtn.setBounds(523, 11, 89, 23);
+		frame.getContentPane().add(adminLoginbtn);
 	
 		
 		
