@@ -1,9 +1,16 @@
 package Entities;
 
+import java.util.Vector;
+
 public class UserInfo {
 
 	private int customerID;
 	private String customerName;
+	private String address;
+	private String number;
+	private String password;
+	
+	
 	/**
 	 * @return the customerID
 	 */
@@ -28,7 +35,39 @@ public class UserInfo {
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getNumber() {
+		return number;
+	}
+	public void setNumber(String number) {
+		this.number = number;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
+	public Vector getVectorCustmor() {
+		Vector v = new Vector();
+		
+		// CarRegistrationNo, model , make, fromDate, toDate
+
+		v.add(customerID);
+		v.add(customerName);
+		v.add(address);
+		v.add(number);
+		v.add(password);
+		
+		
+		return v;
+	}
 	
 	
 }
